@@ -1,0 +1,142 @@
+Domain GereciamentoBiblioteca {
+	Subdomain Acervo
+	Subdomain Administracao
+	Subdomain Analise
+}
+
+ContextMap {
+	contains Administracao
+	contains Acervo	
+	contains Analise	
+	
+	Acervo Shared-Kernel Administracao
+
+	Analise Shared-Kernel Administracao	
+	Analise Shared-Kernel Acervo
+}
+
+BoundedContext Acervo implements Acervo {
+	Aggregate Autor {
+		Entity Autor {
+			aggregateRoot
+
+			-AutorId id
+			String nome
+		}
+		
+		ValueObject AutorId {
+			int id
+		}
+	}
+
+	Aggregate Livro {
+		Entity Livro {
+			aggregateRoot
+
+			-Isbn id
+			String titulo
+			String subtitulo nullable
+			-List<AutorId> autores notEmpty
+		}
+
+		ValueObject Isbn {
+			String codigo
+		}
+
+		ValueObject Isbn10 extends Isbn
+
+		ValueObject Isbn13 extends Isbn
+	}
+
+	Aggregate Exemplar {
+		Service EmprestimoServico {
+			void realizarEmprestimo(@ExemplarId exemplar, @SocioId tomador);
+			void realizarEmprestimo(@Isbn livro, @SocioId tomador);
+			void devolver(@ExemplarId exemplar);
+		}
+		
+		DomainEvent EmprestimoEvento {
+			-Exemplar exemplar
+		}
+		
+		DomainEvent EmprestimoRealizadoEvento extends EmprestimoEvento {
+			-Exemplar exemplar
+		}
+		
+		DomainEvent ExemplarDevolvidoEvento extends EmprestimoEvento {
+			-Exemplar exemplar
+			-Emprestimo emprestimo
+		}
+		
+		Entity Exemplar {
+			aggregateRoot
+
+			-ExemplarId id
+			-Isbn livro
+			-Emprestimo emprestimo nullable
+
+			def boolean disponivel();   // return emprestimo == null
+			def boolean indisponivel(); // return emprestimo != null
+			def boolean emprestado();   // return emprestimo == null
+
+			def @EmprestimoRealizadoEvento realizarEmprestimo(@SocioId tomador);
+			def @ExemplarDevolvidoEvento devolver();
+
+			Repository ExemplarRepository {
+				@Exemplar obter(@ExemplarId id); // Pode ser omitido do modelo
+				List<@Exemplar> pesquisarDisponiveis(@Isbn livro);
+			}
+		}
+
+		ValueObject ExemplarId {
+			int id
+		}
+
+		ValueObject Emprestimo {
+			-Periodo periodo
+			-SocioId tomador
+		}
+
+		ValueObject Periodo {
+			Date inicio
+			Date fim
+		}
+	}
+}
+
+BoundedContext Administracao implements Administracao {
+	Aggregate Socio {
+		Entity Socio {
+			aggregateRoot
+			
+			-SocioId id
+			String nome
+			-Email emailContato
+		}
+		
+		ValueObject SocioId {
+			int id
+		}
+		
+		ValueObject Email {
+			String endereco
+		}
+	}
+}
+
+BoundedContext Analise implements Analise {
+	Aggregate EmprestimoRegistro {
+		Entity EmprestimoRegistro {
+			aggregateRoot
+
+			-EmprestimoRegistroId id
+			-Exemplar exemplar			
+			-Emprestimo emprestimo
+			Date devolucao nullable
+		}
+
+		ValueObject EmprestimoRegistroId {
+			int id
+		}
+	}
+}
