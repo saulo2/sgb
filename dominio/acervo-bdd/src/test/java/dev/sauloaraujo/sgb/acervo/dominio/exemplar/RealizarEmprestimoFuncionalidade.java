@@ -64,7 +64,8 @@ public class RealizarEmprestimoFuncionalidade extends AcervoFuncionalidade {
 		assertTrue(evento instanceof EmprestimoRealizadoEvento);
 
 		var emprestimoRealizado = (EmprestimoRealizadoEvento) evento;
-		var exemplarId = emprestimoRealizado.getExemplar();
+		var exemplar = emprestimoRealizado.getExemplar();
+		var exemplarId = exemplar.getId();
 		assertTrue(this.exemplarId.equals(exemplarId));
 	}
 

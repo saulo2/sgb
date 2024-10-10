@@ -65,7 +65,8 @@ public class DevolverFuncionalidade extends AcervoFuncionalidade {
 		assertTrue(evento instanceof ExemplarDevolvidoEvento);
 
 		var exemplarDevolvido = (ExemplarDevolvidoEvento) evento;
-		var exemplarId = exemplarDevolvido.getExemplar();
+		var exemplar = exemplarDevolvido.getExemplar();
+		var exemplarId = exemplar.getId();
 		assertTrue(this.exemplarId.equals(exemplarId));
 	}
 
