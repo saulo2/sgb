@@ -14,7 +14,7 @@ import dev.sauloaraujo.sgb.aplicacao.acervo.autor.AutorServicoAplicacao;
 import dev.sauloaraujo.sgb.apresentacao.BackendMapeador;
 
 @RestController
-@RequestMapping("autor")
+@RequestMapping("backend/autor")
 class AutorControlador {
 	private @Autowired AutorServico autorServico;
 	private @Autowired AutorServicoAplicacao autorServicoConsulta;

@@ -23,7 +23,7 @@ import dev.sauloaraujo.sgb.apresentacao.BackendMapeador;
 import dev.sauloaraujo.sgb.apresentacao.acervo.livro.LivroFormulario.LivroDto;
 
 @RestController
-@RequestMapping("livro")
+@RequestMapping("backend/livro")
 class LivroControlador {
 	private @Autowired AutorServicoAplicacao autorServicoConsulta;
 	private @Autowired EmprestimoServico emprestimoServico;

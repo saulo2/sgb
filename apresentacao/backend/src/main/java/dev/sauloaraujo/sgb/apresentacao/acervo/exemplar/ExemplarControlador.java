@@ -18,7 +18,7 @@ import dev.sauloaraujo.sgb.aplicacao.acervo.exemplar.ExemplarServicoAplicacao;
 import dev.sauloaraujo.sgb.apresentacao.BackendMapeador;
 
 @RestController
-@RequestMapping("exemplar")
+@RequestMapping("backend/exemplar")
 class ExemplarControlador {
 	private @Autowired EmprestimoServico emprestimoServico;
 	private @Autowired ExemplarServicoAplicacao exemplarServicoConsulta;
